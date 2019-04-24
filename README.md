@@ -12,6 +12,8 @@ SOLR indexes require a full history of events (transactions) to be rebuilt from 
 
 * `kafka-sample` is a Spring Boot Application using `spring-kafka` (to produce and consume Kafka events) and `spring-boot-starter-web` (to provide a simple REST API interface)
 
+![Concept diagram](https://git.alfresco.com/aborroy/event-content-tracker-kafka/wikis/uploads/06c29149af03a5c61f847b74987373da/kafka-boxes.png)
+
 **Usage**
 
 Start Docker Compose.
