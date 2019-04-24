@@ -42,11 +42,18 @@ $ curl -X POST   http://localhost:9999/send -H 'Content-Type: application/json' 
 }'
 ```
 
-Two new entries in Spring Boot Application log will appear : one for the "READ ALL" listener and another one for the living listener.
+Three new entries in Spring Boot Application log will appear : one for the "BEGINNING" listener (reading every event from offset 0), another one for the "FROM OFFSET" listener (reading every event from an `offset` number) and another one for the "LIVE" listener (reading every new event).
 
 ```
-2019-04-22 12:43:33.713  INFO [READ ALL] Received: ContentTrackingMessage [txId=1, nodeId=2]
-2019-04-22 12:43:33.713  INFO Received: ContentTrackingMessage [txId=1, nodeId=2]
+FROM BEGINNING: Received message='ContentTrackingMessage [txId=1, nodeId=2]' with partition-offset='0-0'
+FROM OFFSET '0': Received message='ContentTrackingMessage [txId=1, nodeId=2]' with partition-offset='0-0'
+LIVE: Received message='ContentTrackingMessage [txId=1, nodeId=2]' with partition-offset='0-0'
+```
+
+"FROM OFFSET" is listening from offset 0 by default, but it can be set the starting offset by command line parameter:
+
+```bash
+$ java -jar target/kafka-sample-0.0.1-SNAPSHOT.jar --from.offset=1
 ```
 
 **Configuration**
@@ -68,7 +75,7 @@ kafka:
     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
 ```
 
-*Spring Boot* web application parameters can be configured in `kafka-sample/src/main/resources/application.properties`file.
+*Spring Boot* web application parameters can be configured in `kafka-sample/src/main/resources/application.properties` file.
 
 ```
 # REST API Tomcat port
@@ -85,8 +92,14 @@ spring.kafka.producer.value-serializer=org.springframework.kafka.support.seriali
 
 # Groups and topics configuration
 group.live=groupLive
+group.from=groupFrom
 group.history=groupHistory
 topic.content.tracking=topicContentTracking
+
+# Default from offset and default partition, can be overwritten from command line
+# java -jar target/kafka-sample-0.0.1-SNAPSHOT.jar --from.partition=0 --from.offset=1
+from.partition=0
+from.offset=0
 ```
 
 ## Building
