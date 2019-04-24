@@ -83,7 +83,7 @@ public class Application
 	 * Receives every message sent to default topic from the beginning
 	 * @param contentTrackingMessage
 	 */
-	@KafkaListener(id = "{group.history}", topicPartitions =
+	@KafkaListener(id = "${group.history}", topicPartitions =
 	    { @TopicPartition(topic = "${topic.content.tracking}", 
 	                      partitionOffsets = @PartitionOffset(partition = "0", initialOffset = "0")) })
 	public void readAll(ContentTrackingMessage contentTrackingMessage)
